@@ -1,0 +1,61 @@
+# This configuration deploys 3 API Gateway HTTP endpoints, which each trigger a Lambda function), and creates a DynamoDB table.
+# To destroy these services, use the "serverless remove" command.
+# You may need to log in to https://app.serverless.com and reconnect AWS to the Serverless Framework dashboard.
+# Serverless Framework creates these services through Cloud Formation, and is given access via an IAM role.
+# This configuration was first deployed on 4/2/22.
+org: acoustix
+app: serverless-third-project
+service: serverless-third-project
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  iamRoleStatements:        # Gives Lambda permission to do these actions to the resource listed below (DyanamoDB).
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:Get*"
+        - "dynamodb:Scan*"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-customerTable-${sls:stage}
+  environment:             # Environment variable that our Lambda function will retrieve, that gives it the name of the Dynamo Table.
+    DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}
+
+
+# Creates your lambda functions
+functions:
+  createCustomer:
+    handler: createCustomer.createCustomer    # Where to find source code. <file_name>.<function_name>.
+    events:                                   # Events are what trigger the function. I want to use API Gateway but can probably trigger timers and other events here also.
+      - httpApi:                              # Creates an API Gateway endpoint to call the Lambda function.
+          path: /                             # The HTTP request path.
+          method: post
+  getCustomers:
+    handler: getCustomers.getCustomers
+    events:
+      - httpApi:
+          path: /
+          method: get
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /newPath
+          method: get
+
+# Additional AWS services you want to create.
+resources:
+  Resources:
+    CustomerTable:                            # Creates DynamoDB
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: primary_key
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: primary_key
+            KeyType: HASH
+        TableName: ${self:service}-customerTable-${sls:stage}
