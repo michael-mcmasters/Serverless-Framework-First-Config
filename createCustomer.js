@@ -16,6 +16,10 @@ module.exports.createCustomer = async (event) => {
   await dynamoDb.put(putParams).promise()
 
   return {
-    statusCode: 201
+    statusCode: 201,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }
   }
 }

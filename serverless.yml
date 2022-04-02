@@ -11,6 +11,8 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs14.x
+  httpApi:
+    cors: true
   iamRoleStatements:        # Gives Lambda permission to do these actions to the resource listed below (DyanamoDB).
     - Effect: "Allow"
       Action:
