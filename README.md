@@ -1,6 +1,6 @@
 # Serverless Framework
 
-View the AWS services config in serverless.yml
+serverless.yml is the config file for your AWS services (API Gateway, Lambda functions, and DynamoDB).
 <br />
 createCustomer.js, getCustomers.js and handler.js are the Lambda functions.
 
@@ -23,6 +23,6 @@ Deploy services to AWS
 serverless deploy
 ```
 
-Follow the prompts to connect your config to Serverless Framework.
-It will deploy API Gateway, Lambda and DynamoDB.
-It will ask you a few questions to connect this project to your Serverless Framework account, and then will deploy API Gateway, Lambda, and DynamoDB.
+Follow the prompts to connect your local config to Serverless Framework.
+<br />
+When finished, it will deploy API Gateway, Lambda, and DynamoDB as seen in serverless.js.
