@@ -1,6 +1,8 @@
-## Serverless Framework
+# Serverless Framework
 
-# To Use
+## To Use
+
+Documentation: https://www.serverless.com/framework/docs
 
 - Go to https://app.serverless.com and make an account.
 - Create an organization.
