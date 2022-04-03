@@ -13,7 +13,7 @@ provider:
   runtime: nodejs14.x
   httpApi:
     cors: true
-  iamRoleStatements:        # Gives Lambda permission to do these actions to the resource listed below (DyanamoDB).
+  iamRoleStatements:        # Gives Lambda IAM role to perform these actions on the resource listed below (DyanamoDB).
     - Effect: "Allow"
       Action:
         - "dynamodb:PutItem"
@@ -21,9 +21,9 @@ provider:
         - "dynamodb:Scan*"
         - "dynamodb:UpdateItem"
         - "dynamodb:DeleteItem"
-      Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-customerTable-${sls:stage}
+      Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-customerTable-${sls:stage}    # Make sure everything after the :table/ is the same as the database name, or else IAM role won't be created accurately.
   environment:             # Environment variable that our Lambda function will retrieve, that gives it the name of the Dynamo Table.
-    DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}
+    DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}     # <The name of this project> - customerTable - <Environment>
 
 
 # Creates your lambda functions
